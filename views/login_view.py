@@ -1,9 +1,7 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk  # Importar Image y ImageTk desde Pillow
+from PIL import Image  # Importar Image y ImageTk desde Pillow
 from controllers.auth_controller import AuthController
-from controllers.dashboard_controller import DashboardController
-from utils import centrar_ventana
-from views.dashboard_view import Dashboard
+from utils.utils import centrar_ventana
 
 # Selecting GUI theme - dark,
 # light , system (for system default)
