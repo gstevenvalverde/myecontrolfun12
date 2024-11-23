@@ -1,5 +1,5 @@
 from datetime import datetime
-from utils.auto_usage_tracker import UsageTracker
+from utils.usage_tracker import UsageTracker
 from models.usage_model import get_user_usage_data, update_user_usage_data
 
 def main():
@@ -10,7 +10,7 @@ def main():
 
     try:
         print("Iniciando rastreador de tiempo...")
-        tracker.start()
+        tracker.start_tracking()
 
         while True:
             print("\nOpciones:")
@@ -32,7 +32,7 @@ def main():
             elif choice == "2":
                 # Recuperar tiempo acumulado desde Firestore
                 result = get_user_usage_data(user_id)  # Llamar a la función que recupera los datos del usuario
-
+                print(f"Minutos {tracker.get_current_usage()}")
                 if result["success"]:
                     usage_data = result["usage_data"]  # Acceder a los datos de uso
                     today_minutes = usage_data.get(today, 0)  # Obtener el tiempo acumulado para el día actual
@@ -47,7 +47,7 @@ def main():
                 print("Opción no válida.")
     finally:
         # Detener el rastreador al salir
-        tracker.stop()
+        tracker.stop_tracking()
 
 if __name__ == "__main__":
     main()

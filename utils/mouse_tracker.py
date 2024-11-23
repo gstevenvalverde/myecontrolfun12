@@ -12,22 +12,27 @@ class MouseTracker:
         self.minutes_logged = 0  # Minutos registrados
         self.running = True
         self.today = datetime.now().strftime("%Y-%m-%d")  # Fecha actual
+        self.lock = threading.Lock()  # Lock para sincronizar el acceso a los datos
 
     def _on_move(self, x, y):
         """Callback para registrar movimientos."""
-        self.minute_movements += 1
-        self.total_movements += 1
+        with self.lock:
+            self.minute_movements += 1
+            self.total_movements += 1
 
     def start_tracking(self):
         """Inicia el rastreo de movimientos."""
         def track():
             with mouse.Listener(on_move=self._on_move) as listener:
+                listener.start()
                 while self.running:
-                    self.minute_movements = 0
+                    with self.lock:
+                        self.minute_movements = 0
                     start_time = time.time()
                     while time.time() - start_time < 60:  # Un minuto
                         time.sleep(0.1)  # Espera para reducir carga
-                    self.minutes_logged += 1
+                    with self.lock:
+                        self.minutes_logged += 1
                     print(f"Movimientos este minuto: {self.minute_movements}")
                 listener.stop()
 
@@ -39,11 +44,17 @@ class MouseTracker:
     def stop_tracking(self):
         """Detiene el rastreo y guarda los datos en Firebase."""
         self.running = False
-        if self.minutes_logged > 0:
-            average_movements = self.total_movements / self.minutes_logged
-            store_movement_data(
-                user_id=self.user_id,
-                date=self.today,
-                new_movements=average_movements
-            )
-            print(f"Promedio diario guardado: {average_movements}")
+        with self.lock:
+            if self.minutes_logged > 0:
+                average_movements = self.total_movements / self.minutes_logged
+                store_movement_data(
+                    user_id=self.user_id,
+                    date=self.today,
+                    new_movements=average_movements
+                )
+                print(f"Promedio diario guardado: {average_movements}")
+
+    def get_current_movement(self):
+        """Devuelve el número total de movimientos registrados hasta el momento."""
+        with self.lock:
+            return self.total_movements
