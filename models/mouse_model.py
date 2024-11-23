@@ -1,5 +1,20 @@
 from services.firebase_config import db
 
+def get_user_movement_data(user_id):
+    """
+    Recupera los datos de uso de un usuario desde Firestore.
+    La estructura del documento se ha modificado para almacenar el tiempo de uso dentro de un campo 'usage_data'.
+    """
+    doc_ref = db.collection("movement_data").document(user_id)
+    doc = doc_ref.get()
+
+    if doc.exists:
+        # Recupera solo los datos de uso (el campo 'usage_data')
+        movement_data = doc.to_dict().get("movement_data", {})
+        return {"success": True, "movement_data": movement_data}
+
+    return {"success": False, "error": "Usuario no encontrado."}
+
 def store_movement_data(user_id, date, new_movements):
     """
     Almacena o actualiza el promedio de movimientos del usuario por día en Firestore,

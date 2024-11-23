@@ -1,7 +1,5 @@
 from services.firebase_config import db
-from datetime import datetime
 
-# Guardar o actualizar el tiempo de uso
 def get_user_usage_data(user_id):
     """
     Recupera los datos de uso de un usuario desde Firestore.
