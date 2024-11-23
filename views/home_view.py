@@ -7,11 +7,11 @@ from views.dashboard_view import DashboardView
 class HomeView(CTk):
     def __init__(self, user_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.geometry("800x600")
+        self.geometry("1000x720")
         self.title("Dashboard")
 
         # Inicia el Dashboard
-        self.dashboard = DashboardView(self, "1zeMM4Vsl9OuIq8DwZUM7GaTge82")
+        self.dashboard = DashboardView(self, user_id)
         self.dashboard.pack(fill="both", expand=True)
         self.dashboard.load_data()
 
