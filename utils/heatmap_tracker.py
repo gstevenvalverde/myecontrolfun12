@@ -4,25 +4,29 @@ from datetime import datetime
 from models.heatmap_model import store_heatmap
 
 class HeatmapTracker:
-    def __init__(self, user_id, cursor_tracker, screen_width=1920, screen_height=1080, grid_size_x=10, grid_size_y=10):
+    def __init__(self, user_id, cursor_tracker, screen_width=1920, screen_height=1080, total_cells=40):
         """
         Inicializa el rastreador de heatmap.
         :param user_id: ID del usuario.
         :param cursor_tracker: Instancia de CursorTracker que provee la posición del cursor.
         :param screen_width: Ancho de la pantalla.
         :param screen_height: Alto de la pantalla.
-        :param grid_size_x: Número de columnas en el heatmap.
-        :param grid_size_y: Número de filas en el heatmap.
+        :param total_cells: Número total de celdas en el heatmap (aproximado).
         """
         self.user_id = user_id
-        self.cursor_tracker = cursor_tracker  # Instancia de CursorTracker
+        self.cursor_tracker = cursor_tracker
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.grid_size_x = grid_size_x  # Cambio de grid_size a grid_size_x y grid_size_y
-        self.grid_size_y = grid_size_y
+
+        # Calcular el tamaño del grid basado en la relación de aspecto
+        aspect_ratio = screen_width / screen_height
+        self.grid_size_x = int((total_cells * aspect_ratio) ** 0.5)  # Columnas
+        self.grid_size_y = int(total_cells / self.grid_size_x)       # Filas
+
+        # Inicializar la matriz del heatmap
         self.heatmap = [[0 for _ in range(self.grid_size_x)] for _ in range(self.grid_size_y)]
         self.running = True
-        self.lock = threading.Lock()  # Lock para proteger el acceso al heatmap
+        self.lock = threading.Lock()
 
     def calculate_bin(self, x, y):
         """

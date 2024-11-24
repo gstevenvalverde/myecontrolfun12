@@ -71,7 +71,7 @@ class DashboardView(CTkFrame):
         df = df.sort_values(by="Día")
 
         plt.style.use("dark_background")
-        fig, ax = plt.subplots(figsize=(2.5, 1.5), dpi=96, facecolor="#2B2B2B")
+        fig, ax = plt.subplots(figsize=(5, 3), dpi=96, facecolor="#2B2B2B")
 
         ax.bar(df["Día"].dt.strftime("%m-%d"), df[ylabel], color="#1E88E5", label=ylabel)
 
@@ -107,7 +107,7 @@ class DashboardView(CTkFrame):
         chart_container = self.create_chart_container(parent, row, col)
 
         plt.style.use("dark_background")
-        fig, ax = plt.subplots(figsize=(2.5, 1.5), dpi=96, facecolor="#2B2B2B")
+        fig, ax = plt.subplots(figsize=(3, 2), dpi=96, facecolor="#2B2B2B")
 
         cax = ax.matshow(data, cmap="viridis")
 

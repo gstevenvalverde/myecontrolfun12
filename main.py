@@ -1,28 +1,26 @@
+import customtkinter as ctk
 from controllers.auth_controller import AuthController
+from views.login_view import Login
+from utils.utils import centrar_ventana
 
 
 def main():
-    controller = AuthController()
-    while True:
-        print("\nOpciones:")
-        print("1. Registrarse")
-        print("2. Iniciar sesión")
-        print("3. Salir")
+    """
+    Punto de entrada principal de la aplicación.
+    """
+    # Inicializar la ventana principal
+    root = ctk.CTk()
+    centrar_ventana(root, 600, 400)
 
-        choice = input("Selecciona una opción: ")
-        if choice == "1":
-            email = input("Correo electrónico: ")
-            password = input("Contraseña: ")
-            controller.signup(email, password)
-        elif choice == "2":
-            email = input("Correo electrónico: ")
-            password = input("Contraseña: ")
-            controller.login(email, password)
-        elif choice == "3":
-            print("¡Adiós!")
-            break
-        else:
-            print("Opción no válida.")
+    # Inicializar el controlador de autenticación
+    controller = AuthController()
+
+    # Crear la vista principal (login)
+    app = Login(root, controller)
+
+    # Ejecutar el bucle principal de la aplicación
+    root.mainloop()
+
 
 if __name__ == "__main__":
     main()
