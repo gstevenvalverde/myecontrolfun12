@@ -19,12 +19,12 @@ class DashboardView(CTkFrame):
         self.data = {}
 
         # Crear título
-        self.title_label = CTkLabel(self, text="Dashboard", font=("Arial", 18))
-        self.title_label.pack(pady=10)
+        self.title_label = CTkLabel(self, text="Dashboard Firebase", font=("Arial", 14))
+        self.title_label.pack(pady=4)
 
         # Contenedor para los gráficos (2x2)
         self.grid_container = CTkFrame(self)
-        self.grid_container.pack(fill="both", expand=True, padx=10, pady=10)
+        self.grid_container.pack(fill="both", expand=True, padx=4, pady=4)
 
         # Cargar los datos y mostrar gráficos
         self.load_data()
@@ -93,7 +93,7 @@ class DashboardView(CTkFrame):
         df = df.sort_values(by="Día")
 
         plt.style.use("dark_background")
-        fig, ax = plt.subplots(figsize=(2.5, 1.5), dpi=96, facecolor="#2B2B2B")
+        fig, ax = plt.subplots(figsize=(2.5, 1.3), dpi=96, facecolor="#2B2B2B")
 
         ax.plot(df["Día"].dt.strftime("%m-%d"), df[ylabel], color="#1E88E5", marker="o", linestyle="-")
 
@@ -122,7 +122,7 @@ class DashboardView(CTkFrame):
         Crea un contenedor para los gráficos dentro de la grilla.
         """
         chart_container = CTkFrame(parent, width=400, height=300)
-        chart_container.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
+        chart_container.grid(row=row, column=col, padx=4, pady=4, sticky="nsew")
         chart_container.grid_propagate(False)
         return chart_container
 
@@ -130,10 +130,10 @@ class DashboardView(CTkFrame):
         """
         Aplica estilos al gráfico.
         """
-        ax.set_title(title, color="white", fontsize=5)
-        ax.set_ylabel(ylabel, color="white", fontsize=3)
-        ax.tick_params(axis="x", colors="white", labelsize=3)
-        ax.tick_params(axis="y", colors="white", labelsize=3)
+        ax.set_title(title, color="white", fontsize=10)
+        ax.set_ylabel(ylabel, color="white", fontsize=8)
+        ax.tick_params(axis="x", colors="white", labelsize=8)
+        ax.tick_params(axis="y", colors="white", labelsize=8)
         ax.spines["top"].set_color("#444")
         ax.spines["bottom"].set_color("#444")
         ax.spines["left"].set_color("#444")

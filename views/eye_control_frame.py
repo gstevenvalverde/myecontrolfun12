@@ -26,13 +26,35 @@ class EyeControlFrame(ctk.CTkFrame):
         self.stop_button.pack(pady=10)
 
     def scan_face(self):
+        """Inicia el escaneo de rostro."""
         print("Escaneo de rostro iniciado...")
+        scan_face()
 
     def start_tracking(self):
-        print("Seguimiento ocular iniciado...")
+        """Calibra el cursor y comienza el seguimiento ocular."""
+        global cap
+        if cap is None:
+            cap = cv2.VideoCapture(0)
+
+        if not cap.isOpened():
+            print("No se pudo abrir la cámara.")
+            return
+
+        print("Calibrando el cursor...")
+        calibrate_cursor(cap)
+
+        print("Iniciando seguimiento ocular...")
+        tracking_thread = Thread(target=track_eyes_and_blinks, args=(cap,))
+        tracking_thread.start()
 
     def stop_tracking(self):
-        print("Seguimiento ocular detenido...")
+        """Detiene el seguimiento ocular y libera la cámara."""
+        global cap
+        if cap and cap.isOpened():
+            cap.release()
+            print("Seguimiento ocular detenido.")
+        else:
+            print("No hay seguimiento en curso.")
 
 
 # Función principal para ejecutar la aplicación
